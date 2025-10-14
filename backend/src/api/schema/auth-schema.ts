@@ -14,7 +14,7 @@ export const signupSchema = z.object({
     .trim()
     .min(6, "Password must be at least 6 characters long"),
   role: z.enum(UserRole, {
-    error: "Please specify User role from [user, delivery_partner]",
+    error: "Please specify User role from [buyer, seller, delivery_agent]",
   }),
 });
 
