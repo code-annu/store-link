@@ -3,29 +3,18 @@ import {
   generateRefreshToken,
 } from "../../../util/jwt-util";
 import { AuthUser, UserRole } from "../../entity/auth-user";
-import bcrypt from "bcrypt";
+import { CustomError } from "../../error/custom-error";
+import { ErrorType } from "../../error/error-type";
 import { IUserRepository } from "../../repository/iuser-repository";
 
-const SALT_ROUNDS = 10;
-export class Signup {
-  constructor(private readonly userAuthRepo: IUserRepository) {}
+export class UpdateUserRole {
+  constructor(private readonly userRepo: IUserRepository) {}
 
-  async execute({
-    email,
-    password,
-    role,
-  }: {
-    email: string;
-    password: string;
-    role: UserRole;
-  }): Promise<AuthUser> {
-    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
-
-    const user = await this.userAuthRepo.createUser({
-      email: email,
-      password_hash: hashedPassword,
-      role: role,
-    });
+  async execute(uid: string, role: UserRole): Promise<AuthUser> {
+    const user = await this.userRepo.updateUserByUid(uid, { role: role });
+    if (user == null) {
+      throw new CustomError("User not found", ErrorType.NOT_FOUND);
+    }
 
     const accessToken = generateAccessToken({
       userId: user.uid,
@@ -37,7 +26,7 @@ export class Signup {
       email: user.email,
     });
 
-    await this.userAuthRepo.updateUserByUid(user.uid, {
+    await this.userRepo.updateUserByUid(user.uid, {
       refresh_token: refreshToken,
     });
     user.access_token = accessToken;

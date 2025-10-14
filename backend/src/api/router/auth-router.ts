@@ -6,10 +6,10 @@ import {
   refreshTokenSchema,
   signupSchema,
 } from "../schema/auth-schema";
-import { AuthUserRepository } from "../../infrastructure/repository/auth-user-repository";
+import { UserRepository } from "../../infrastructure/repository/user-repository";
 
 export const authRouter = Router({ mergeParams: true });
-const authController = new AuthController(new AuthUserRepository());
+const authController = new AuthController(new UserRepository());
 
 authRouter.post(
   "/signup",
@@ -28,3 +28,5 @@ authRouter.post(
   validateRequestBody(refreshTokenSchema),
   authController.postRefreshToken.bind(authController)
 );
+
+

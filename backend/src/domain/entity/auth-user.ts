@@ -16,3 +16,6 @@ export enum UserRole {
 
 export interface AuthUserCreate
   extends Pick<AuthUser, "email" | "password_hash" | "role"> {}
+
+export interface AuthUserUpdate
+  extends Partial<Pick<AuthUser, "role" | "refresh_token">> {}

@@ -5,14 +5,14 @@ import {
 import { AuthUser } from "../../entity/auth-user";
 import { CustomError } from "../../error/custom-error";
 import { ErrorType } from "../../error/error-type";
-import { IUserAuthRepository } from "../../repository/iauth-repository";
+import { IUserRepository } from "../../repository/iuser-repository";
 import bcrypt from "bcrypt";
 
 export class Login {
-  constructor(private readonly userAuthRepo: IUserAuthRepository) {}
+  constructor(private readonly userAuthRepo: IUserRepository) {}
 
   async execute(email: string, password: string): Promise<AuthUser> {
-    const user = await this.userAuthRepo.getAuthUserByEmail(email);
+    const user = await this.userAuthRepo.getUserByEmail(email);
     if (user == null) {
       throw new CustomError(
         `User with email ${email} not found! Try to signup`,
@@ -38,7 +38,9 @@ export class Login {
       email: user.email,
     });
 
-    await this.userAuthRepo.updateUserRefreshToken(user.uid, refreshToken);
+    await this.userAuthRepo.updateUserByUid(user.uid, {
+      refresh_token: refreshToken,
+    });
     user.access_token = accessToken;
     user.refresh_token = refreshToken;
 

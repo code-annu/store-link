@@ -6,13 +6,13 @@ import {
 import { AuthUser } from "../../entity/auth-user";
 import { CustomError } from "../../error/custom-error";
 import { ErrorType } from "../../error/error-type";
-import { IUserAuthRepository } from "../../repository/iauth-repository";
+import { IUserRepository } from "../../repository/iuser-repository";
 
 export class RefreshToken {
-  constructor(private readonly userRepository: IUserAuthRepository) {}
+  constructor(private readonly userRepository: IUserRepository) {}
   async execute(token: string): Promise<AuthUser> {
     const decodedData = verifyRefreshToken(token);
-    const user = await this.userRepository.getAuthUserByUid(decodedData.userId);
+    const user = await this.userRepository.getUserByUid(decodedData.userId);
 
     if (user == null) {
       throw new CustomError(
@@ -37,7 +37,9 @@ export class RefreshToken {
       email: user.email,
     });
 
-    await this.userRepository.updateUserRefreshToken(user.uid, refreshToken);
+    await this.userRepository.updateUserByUid(user.uid, {
+      refresh_token: refreshToken,
+    });
     user.access_token = accessToken;
     user.refresh_token = refreshToken;
 

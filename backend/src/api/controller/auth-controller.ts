@@ -2,19 +2,20 @@ import { Request, Response } from "express";
 import { Login } from "../../domain/usecase/auth/login-usecase";
 import { Signup } from "../../domain/usecase/auth/signup-usecase";
 import { RefreshToken } from "../../domain/usecase/auth/refresh-token-usecase";
-import { IUserAuthRepository } from "../../domain/repository/iauth-repository";
+import { IUserRepository } from "../../domain/repository/iuser-repository";
 import { CustomError } from "../../domain/error/custom-error";
 import { mapToAuthResponse } from "../mapper/auth-mapper";
+import { UpdateUserRole } from "../../domain/usecase/auth/update-user-role-usecase";
 
 export class AuthController {
   private login: Login;
   private signup: Signup;
   private refreshToken: RefreshToken;
 
-  constructor(userAuthRepo: IUserAuthRepository) {
-    this.login = new Login(userAuthRepo);
-    this.signup = new Signup(userAuthRepo);
-    this.refreshToken = new RefreshToken(userAuthRepo);
+  constructor(userRepo: IUserRepository) {
+    this.login = new Login(userRepo);
+    this.signup = new Signup(userRepo);
+    this.refreshToken = new RefreshToken(userRepo);
   }
 
   async postSignup(req: Request, res: Response) {
