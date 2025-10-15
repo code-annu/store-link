@@ -46,7 +46,11 @@ export class BaseRepository {
 
   protected async listByIds(
     uids: Array<string | number>
-  ): Promise<PostgrestResponse<any>> {
+  ) {
     return await this.db.from(this.table).select("*").in("uid", uids);
+  }
+
+  protected async listByKey(key: string, value: string) {
+    return await this.db.from(this.table).select("*").eq(key, value);
   }
 }
