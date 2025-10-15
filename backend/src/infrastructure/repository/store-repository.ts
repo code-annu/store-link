@@ -34,7 +34,7 @@ export class StoreRepository
   }
 
   async getStoresByOwnerUid(ownerUid: string): Promise<Store[]> {
-    const { data, error } = await super.listByKey("owner_uid", ownerUid);
+    const { data, error } = await super.listByColumn("owner_uid", ownerUid);
     console.log(data, error);
     if (error) {
       throw new CustomError(error.message, ErrorType.INTERNAL_SERVER_ERROR);
@@ -63,5 +63,14 @@ export class StoreRepository
     }
 
     return data as Store;
+  }
+
+  async getStoresByName(name: string): Promise<Store[]> {
+    const { data, error } = await super.listILIkeByColumn("name", name);
+    if (error) {
+      throw new CustomError(error.message, ErrorType.INTERNAL_SERVER_ERROR);
+    }
+
+    return data as Store[];
   }
 }

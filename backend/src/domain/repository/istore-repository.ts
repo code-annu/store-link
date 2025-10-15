@@ -6,4 +6,5 @@ export interface IStoreRepository {
   getStoresByOwnerUid(ownerUid: string): Promise<Store[]>;
   updateStoreByUid(uid: string, updates: StoreUpdate): Promise<Store | null>;
   deleteStoreByUid(uid: string): Promise<Store | null>;
+  getStoresByName(name: string): Promise<Store[]>;
 }

@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { StoreController } from "../controller/store-controller";
 import { StoreRepository } from "../../infrastructure/repository/store-repository";
-import { SellerRepository } from "../../infrastructure/repository/seller-repository";
 import { UserRepository } from "../../infrastructure/repository/user-repository";
 import { validateAuthorization } from "../middleware/auth-middleware";
 import { validateRequestBody } from "../middleware/validate-request-body";
@@ -34,7 +33,6 @@ storeRouter.delete(
   storeController.deleteStore.bind(storeController)
 );
 
-storeRouter.get(
-  "/:storeUid",
-  storeController.getStore.bind(storeController)
-);
+storeRouter.get("/:storeUid", storeController.getStore.bind(storeController));
+
+storeRouter.get("/", storeController.searchStore.bind(storeController));

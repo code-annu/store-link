@@ -44,13 +44,21 @@ export class BaseRepository {
       .single();
   }
 
-  protected async listByIds(
-    uids: Array<string | number>
-  ) {
+  protected async listByIds(uids: Array<string | number>) {
     return await this.db.from(this.table).select("*").in("uid", uids);
   }
 
-  protected async listByKey(key: string, value: string) {
-    return await this.db.from(this.table).select("*").eq(key, value);
+  protected async listByColumn(column: string, value: string) {
+    return await this.db.from(this.table).select("*").eq(column, value);
+  }
+
+  protected async listILIkeByColumn(
+    column: string,
+    value: string
+  ): Promise<PostgrestSingleResponse<any>> {
+    return await this.db
+      .from(this.table)
+      .select("*")
+      .ilike(column, `%${value}%`);
   }
 }
