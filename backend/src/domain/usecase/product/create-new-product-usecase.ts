@@ -14,20 +14,24 @@ export class CreateNewProduct {
 
   async execute(
     productData: ProductCreate,
-    sellerUid: string,
-    storeUid: string
+    sellerUid: string
   ): Promise<Product> {
     const seller = await this.sellerRepo.getSellerByUid(sellerUid);
     if (seller == null) {
       throw new CustomError("Seller not found!", ErrorType.NOT_FOUND);
     }
 
-    const store = await this.storeRepo.getStoreByUid(storeUid);
+    const store = await this.storeRepo.getStoreByUid(productData.store_uid);
     if (store == null) {
       throw new CustomError("Store not found!", ErrorType.NOT_FOUND);
     }
 
-    const product = await this.productRepo.insertProduct(productData);
+    const product = await this.productRepo.createProduct({
+      ...productData,
+      seller_uid: sellerUid,
+      sold_out: false,
+      is_available: true,
+    });
     return product;
   }
 }
