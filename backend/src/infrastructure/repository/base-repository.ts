@@ -1,5 +1,4 @@
 import {
-  PostgrestResponse,
   PostgrestSingleResponse,
 } from "@supabase/supabase-js";
 import { supabaseClient } from "../config/db";
