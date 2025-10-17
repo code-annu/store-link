@@ -40,4 +40,9 @@ productRouter.delete(
   validateAuthorization,
   validateRequestBody(ProductUpdateSchema),
   productController.deleteProduct.bind(productController)
-); 
+);
+
+productRouter.get(
+  "/",
+  productController.searchProducts.bind(productController)
+);

@@ -108,7 +108,9 @@ export class MainBaseRepository<T> {
     const { data, error } = await this.db
       .from(this.table)
       .select("*")
-      .ilike(column, value);
+      .ilike(column, `%${value}%`);
+
+    console.log(data);
 
     if (error) {
       throw new CustomError(error.message, ErrorType.INTERNAL_SERVER_ERROR);

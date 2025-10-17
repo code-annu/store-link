@@ -9,12 +9,14 @@ import { IStoreRepository } from "../../domain/repository/istore-repository";
 import { AuthRequest } from "../middleware/auth-middleware";
 import { CustomError } from "../../domain/error/custom-error";
 import { ErrorType } from "../../domain/error/error-type";
+import { SearchProduct } from "../../domain/usecase/product/search-product-usecase";
 
 export class ProductController {
   private readonly createNewProduct: CreateNewProduct;
   private readonly getProductDetails: GetProductDetails;
   private readonly updateProductDetails: UpdateProductDetails;
   private readonly deleteProductDetails: DeleteProductDetails;
+  private readonly searchProduct: SearchProduct;
 
   constructor(
     productRepo: IProductRepository,
@@ -29,6 +31,7 @@ export class ProductController {
     this.getProductDetails = new GetProductDetails(productRepo);
     this.updateProductDetails = new UpdateProductDetails(productRepo);
     this.deleteProductDetails = new DeleteProductDetails(productRepo);
+    this.searchProduct = new SearchProduct(productRepo);
   }
 
   async postProduct(req: AuthRequest, res: Response) {
@@ -111,6 +114,29 @@ export class ProductController {
       }
       await this.deleteProductDetails.execute(productUid, userUid!);
       res.status(200).json({ message: "Product deleted successfully" });
+    } catch (e) {
+      if (e instanceof CustomError) {
+        res.status(e.errorType).json({ message: e.message });
+      } else {
+        res
+          .status(ErrorType.INTERNAL_SERVER_ERROR)
+          .json({ message: (e as Error).message });
+      }
+    }
+  }
+
+  async searchProducts(req: Request, res: Response) {
+    try {
+      const { query } = req.query;
+      console.log(query)
+      if (query == null) {
+        throw new CustomError(
+          "Product name is required with query",
+          ErrorType.BAD_REQUEST
+        );
+      }
+      const products = await this.searchProduct.execute(query.toString());
+      res.status(200).json(products);
     } catch (e) {
       if (e instanceof CustomError) {
         res.status(e.errorType).json({ message: e.message });
