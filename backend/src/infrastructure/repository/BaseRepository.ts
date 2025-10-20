@@ -7,7 +7,6 @@ export class BaseRepository<T> {
     constructor(private readonly table: string) {
     }
 
-
     protected async create(newData: Partial<T>): Promise<T> {
         const {data, error} = await this.db
             .from(this.table)
