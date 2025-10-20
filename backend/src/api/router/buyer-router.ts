@@ -1,4 +1,4 @@
-import {IRouter, Router} from "express";
+import {Router} from "express";
 import {BuyerController} from "../controller/BuyerController";
 import {BuyerRepository} from "../../infrastructure/repository/BuyerRepository";
 import {UserRepository} from "../../infrastructure/repository/UserRepository";
