@@ -2,6 +2,7 @@ import express from 'express';
 import {errorHandler} from "./api/middleware/handle-error";
 import {authRouter} from "./api/router/signup-router";
 import {buyerRouter} from "./api/router/buyer-router";
+import {sellerRouter} from "./api/router/seller-router";
 
 const app = express();
 
@@ -11,7 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(`${BASE_API_URL}/auth`, authRouter)
 app.use(`${BASE_API_URL}/buyer`, buyerRouter)
-
+app.use(`${BASE_API_URL}/seller`, sellerRouter)
 
 app.use(errorHandler)
 
