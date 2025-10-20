@@ -13,11 +13,11 @@ export class CreateBuyerProfileUsecase {
     async execute(userUid: string, buyerProfileInput: BuyerProfileInput): Promise<Buyer> {
         const user = await this.userRepo.updateUser(userUid, {role: UserRole.BUYER})
         if (!user) {
-            throw new NotFoundError('User not found. Account maybe deleted');
+            throw new NotFoundError('User not found. Please create account before creating profile');
         }
 
         const buyer = await this.buyerRepo.getBuyer(userUid)
-        if(buyer){
+        if (buyer) {
             throw new ConflictError("Buyer profile already created. You can update your profile")
         }
 

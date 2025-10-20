@@ -8,13 +8,10 @@ export class DeleteBuyerProfileUsecase {
     }
 
     async execute(buyerUid: string): Promise<Buyer> {
-        const buyer = await this.buyerRepo.getBuyer(buyerUid)
+        const buyer = await this.buyerRepo.deleteBuyer(buyerUid)
         if (!buyer) {
             throw new NotFoundError("Buyer profile not found! Account may be deleted");
         }
-
-        await this.userRepo.deleteUser(buyerUid)
-
         return buyer;
     }
 }
