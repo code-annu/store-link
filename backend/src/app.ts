@@ -3,6 +3,7 @@ import {errorHandler} from "./api/middleware/handle-error";
 import {authRouter} from "./api/router/signup-router";
 import {buyerRouter} from "./api/router/buyer-router";
 import {sellerRouter} from "./api/router/seller-router";
+import {storeRouter} from "./api/router/store-router";
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(express.urlencoded({extended: true}));
 app.use(`${BASE_API_URL}/auth`, authRouter)
 app.use(`${BASE_API_URL}/buyer`, buyerRouter)
 app.use(`${BASE_API_URL}/seller`, sellerRouter)
+app.use(`${BASE_API_URL}/store`, storeRouter)
 
 app.use(errorHandler)
 
