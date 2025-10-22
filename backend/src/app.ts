@@ -4,6 +4,7 @@ import {authRouter} from "./api/router/signup-router";
 import {buyerRouter} from "./api/router/buyer-router";
 import {sellerRouter} from "./api/router/seller-router";
 import {storeRouter} from "./api/router/store-router";
+import {productRouter} from "./api/router/product-router";
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(`${BASE_API_URL}/auth`, authRouter)
 app.use(`${BASE_API_URL}/buyer`, buyerRouter)
 app.use(`${BASE_API_URL}/seller`, sellerRouter)
 app.use(`${BASE_API_URL}/store`, storeRouter)
+app.use(`${BASE_API_URL}/product`, productRouter)
 
 app.use(errorHandler)
 
