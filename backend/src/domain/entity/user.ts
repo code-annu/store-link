@@ -16,7 +16,7 @@ export interface UserUpdate extends Partial<Pick<User, "refresh_token" | "role">
 export enum UserRole {
     SELLER = "seller",
     BUYER = "buyer",
-    DELIVERY_AGENT = "delivery_agent",
+    DELIVERY_PARTNER = "delivery_partner",
 }
 
 
