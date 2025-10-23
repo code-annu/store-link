@@ -13,7 +13,7 @@ export const SignupSchema = z.object({
         .string()
         .trim()
         .nonempty("Password must be at least 6 characters long"),
-    role: z.enum(UserRole).optional(),
+    role: z.enum(UserRole).nonoptional("Pick a user role from [seller, buyer, delivery_partner]"),
 });
 
 export const LoginSchema = z.object({
