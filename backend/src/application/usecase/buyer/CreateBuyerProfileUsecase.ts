@@ -5,15 +5,20 @@ import {IUserRepository} from "../../../domain/repository/IUserRepository";
 import {UserRole} from "../../../domain/entity/user";
 import {NotFoundError} from "../../../domain/error/NotFoundError";
 import {ConflictError} from "../../../domain/error/ConflictError";
+import {ForbiddenError} from "../../../domain/error/ForbiddenError";
 
 export class CreateBuyerProfileUsecase {
     constructor(private readonly buyerRepo: IBuyerRepository, private readonly userRepo: IUserRepository) {
     }
 
     async execute(userUid: string, buyerProfileInput: BuyerProfileInput): Promise<Buyer> {
-        const user = await this.userRepo.updateUser(userUid, {role: UserRole.BUYER})
+        const user = await this.userRepo.getUserByUid(userUid);
         if (!user) {
-            throw new NotFoundError('User not found. Please create account before creating profile');
+            throw new NotFoundError(`User not found. Please create account before creating profile`);
+        }
+
+        if (user.role != UserRole.BUYER) {
+            throw new ForbiddenError(`Your are not allowed to create a buyer profile with role ${user.role}`)
         }
 
         const buyer = await this.buyerRepo.getBuyer(userUid)

@@ -12,7 +12,7 @@ export interface AuthOutput {
 export interface SignupInput {
     email: string;
     password: string;
-    role?: string;
+    role: string;
 }
 
 export interface LoginInput {

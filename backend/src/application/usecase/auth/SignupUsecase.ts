@@ -22,7 +22,7 @@ export class SignupUsecase {
         const userCreate: UserCreate = {
             email: signupInput.email,
             password_hash: hashedPassword,
-            role: signupInput.role ? signupInput.role : UserRole.BUYER
+            role: signupInput.role
         }
 
         const createdUser = await this.userRepo.createUser(userCreate)
