@@ -1,5 +1,4 @@
 import {Request, Response, NextFunction} from "express";
-import {Product} from "../../domain/entity/product";
 import {CreateNewProductUsecase} from "../../application/usecase/product/CreateNewProductUsecase";
 import {GetProductDetailsUsecase} from "../../application/usecase/product/GetProductDetailsUsecase";
 import {UpdateProductDetailsUsecase} from "../../application/usecase/product/UpdateProductDetailsUsecase";
@@ -8,13 +7,13 @@ import {IProductRepository} from "../../domain/repository/IProductRepository";
 import {ISellerRepository} from "../../domain/repository/ISellerRepository";
 import {IStoreRepository} from "../../domain/repository/IStoreRepository";
 import {AuthRequest} from "../middleware/validate-authorization";
-import {BadRequestError} from "../../domain/error/BadRequestError";
 
 export class ProductController {
     private readonly createNewProduct: CreateNewProductUsecase
     private readonly getProductDetails: GetProductDetailsUsecase
     private readonly updateProductDetails: UpdateProductDetailsUsecase
     private readonly deleteProductDetails: DeleteProductDetailsUsecase
+    
 
     constructor(productRepo: IProductRepository, sellerRepo: ISellerRepository, storeRepo: IStoreRepository) {
         this.createNewProduct = new CreateNewProductUsecase(productRepo, sellerRepo, storeRepo);
