@@ -46,4 +46,8 @@ export class ProductRepository
   async getListOfProducts(category: string): Promise<Product[]> {
     return super.findManyBy("category", category);
   }
+
+  async getProductsOfStore(storeUid: string): Promise<Product[]> {
+    return super.findManyBy("store_uid", storeUid);
+  }
 }

@@ -30,4 +30,8 @@ export class OrderRepository
   async deleteOrder(orderUid: string): Promise<Order | null> {
     return super.deleteOne("uid", orderUid);
   }
+
+  getUnclaimedOrders(): Promise<Order[]> {
+    return super.findManyNullBy("delivery_partner_uid");
+  }
 }

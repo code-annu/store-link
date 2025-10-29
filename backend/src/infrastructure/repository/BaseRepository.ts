@@ -72,6 +72,19 @@ export class BaseRepository<T> {
     return data as T[];
   }
 
+  async findManyNullBy(column: string) {
+    const { data, error } = await this.db
+      .from(this.table)
+      .select("*")
+      .is(column, null);
+
+    if (error) {
+      throw new DatabaseError(error.message);
+    }
+
+    return data as T[];
+  }
+
   async findManyByIn(column: string, values: string[]): Promise<T[]> {
     const { data, error } = await this.db
       .from(this.table)
