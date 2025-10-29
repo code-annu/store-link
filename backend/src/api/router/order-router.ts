@@ -23,10 +23,12 @@ orderRouter.post(
 );
 
 orderRouter.get("/:orderUid", orderController.getOrder.bind(orderController));
+
 orderRouter.patch(
   "/:orderUid/claim",
-  orderController.patchOrderClaim.bind(orderController)
+  orderController.claimOrder.bind(orderController)
 );
+
 orderRouter.patch(
   "/:orderUid/status",
   validateRequestBody(OrderUpdateSchema),

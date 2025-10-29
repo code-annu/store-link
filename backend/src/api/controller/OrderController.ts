@@ -60,7 +60,7 @@ export class OrderController {
     }
   }
 
-  async patchOrderClaim(req: AuthRequest, res: Response, next: NextFunction) {
+  async claimOrder(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const userUid = req.auth?.userId;
       const { orderUid } = req.params;

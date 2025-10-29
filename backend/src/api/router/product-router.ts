@@ -1,18 +1,37 @@
-import {Router} from "express";
-import {validateRequestBody} from "../middleware/validate-request-body";
-import {validateAuthorization} from "../middleware/validate-authorization";
-import {ProductController} from "../controller/ProductController";
-import {ProductRepository} from "../../infrastructure/repository/ProductRepository";
-import {SellerRepository} from "../../infrastructure/repository/SellerRepository";
-import {StoreRepository} from "../../infrastructure/repository/StoreRepository";
-import {ProductCreateSchema, ProductUpdateSchema} from "../schema/product-schema";
+import { Router } from "express";
+import { ProductController } from "../controller/ProductController";
+import { ProductRepository } from "../../infrastructure/repository/ProductRepository";
+import { SellerRepository } from "../../infrastructure/repository/SellerRepository";
+import { StoreRepository } from "../../infrastructure/repository/StoreRepository";
+import { StoreController } from "../controller/StoreController";
 
+export const productRouter = Router();
+const productController = new ProductController(
+  new ProductRepository(),
+  new SellerRepository(),
+  new StoreRepository()
+);
+const storeController = new StoreController(
+  new StoreRepository(),
+  new SellerRepository()
+);
 
-export const productRouter = Router()
-const productController = new ProductController(new ProductRepository(), new SellerRepository(), new StoreRepository())
+productRouter.get(
+  "/search",
+  productController.searchProducts.bind(productController)
+);
 
+productRouter.get(
+  "/category/:category",
+  productController.getCategoryProducts.bind(productController)
+);
 
-productRouter.post('/', validateAuthorization, validateRequestBody(ProductCreateSchema), productController.postProduct.bind(productController))
-productRouter.get('/:productUid', validateAuthorization, productController.getProduct.bind(productController))
-productRouter.patch('/:productUid', validateAuthorization, validateRequestBody(ProductUpdateSchema), productController.patchProduct.bind(productController))
-productRouter.delete('/:productUid', validateAuthorization, productController.deleteProduct.bind(productController))
+productRouter.get(
+  "/trending",
+  productController.getTrendingProducts.bind(productController)
+);
+
+productRouter.get(
+  "/:productUid",
+  productController.getProduct.bind(productController)
+);

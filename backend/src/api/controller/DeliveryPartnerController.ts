@@ -6,16 +6,20 @@ import { GetDeliveryPartnerProfileUsecase } from "../../application/usecase/deli
 import { DeleteDeliveryPartnerProfileUsecase } from "../../application/usecase/delivery_partner/DeleteDeliveryPartnerProfileUsecase";
 import { IDeliveryPartnerRepository } from "../../domain/repository/IDeliveryPartnerRepository";
 import { IUserRepository } from "../../domain/repository/IUserRepository";
+import { GetUnclaimedOrdersUsecase } from "../../application/usecase/order/GetUnclaimedOrdersUsecase";
+import { IOrderRepository } from "../../domain/repository/IOrderRepository";
 
 export class DeliveryPartnerController {
   private readonly createDeliveryPartnerProfile: CreateDeliveryPartnerProfileUsecase;
   private readonly updateDeliveryPartnerProfile: UpdateDeliveryPartnerProfileUsecase;
   private readonly getDeliveryPartnerProfile: GetDeliveryPartnerProfileUsecase;
   private readonly deleteDeliveryPartnerProfile: DeleteDeliveryPartnerProfileUsecase;
+  private readonly getUnclaimedOrders: GetUnclaimedOrdersUsecase;
 
   constructor(
     deliveryPartnerRepo: IDeliveryPartnerRepository,
-    userRepo: IUserRepository
+    userRepo: IUserRepository,
+    orderRepo: IOrderRepository
   ) {
     this.createDeliveryPartnerProfile = new CreateDeliveryPartnerProfileUsecase(
       deliveryPartnerRepo,
@@ -31,6 +35,10 @@ export class DeliveryPartnerController {
     this.deleteDeliveryPartnerProfile = new DeleteDeliveryPartnerProfileUsecase(
       deliveryPartnerRepo,
       userRepo
+    );
+    this.getUnclaimedOrders = new GetUnclaimedOrdersUsecase(
+      orderRepo,
+      deliveryPartnerRepo
     );
   }
 
@@ -102,6 +110,20 @@ export class DeliveryPartnerController {
       const response = await this.deleteDeliveryPartnerProfile.execute(
         userUid!
       );
+      res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async listUnclaimedOrders(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const userUid = req.auth?.userId;
+      const response = await this.getUnclaimedOrders.execute(userUid!);
       res.status(200).json(response);
     } catch (error) {
       next(error);

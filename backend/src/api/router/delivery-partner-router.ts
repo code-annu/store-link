@@ -7,11 +7,13 @@ import {
   DeliveryPartnerCreateSchema,
   DeliveryPartnerUpdateSchema,
 } from "../schema/delivery-partner-schema";
+import { OrderRepository } from "../../infrastructure/repository/OrderRepository";
 
 export const deliveryPartnerRouter = Router();
 const deliveryPartnerController = new DeliveryPartnerController(
   new DeliveryPartnerRepository(),
-  new UserRepository()
+  new UserRepository(),
+  new OrderRepository()
 );
 
 deliveryPartnerRouter.post(
@@ -33,4 +35,9 @@ deliveryPartnerRouter.delete(
   deliveryPartnerController.deleteDeliveryPartner.bind(
     deliveryPartnerController
   )
+);
+
+deliveryPartnerRouter.get(
+  "/unclaimed-orders",
+  deliveryPartnerController.listUnclaimedOrders.bind(deliveryPartnerController)
 );
