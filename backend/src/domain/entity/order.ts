@@ -16,6 +16,7 @@ export interface Order {
   product_uid?: string | null;
   status: OrderStatus;
   delivery_address: string;
+  total_amount: number;
   created_at: string;
   updated_at: string;
 }
@@ -30,6 +31,7 @@ export interface OrderCreate
     | "delivery_address"
     | "store_uid"
     | "delivery_partner_uid"
+    | "total_amount"
   > {}
 
 export interface OrderUpdate

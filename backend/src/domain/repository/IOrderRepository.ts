@@ -1,11 +1,13 @@
-import {Order, OrderCreate, OrderUpdate} from "../entity/order";
+import { Order, OrderCreate, OrderUpdate } from "../entity/order";
 
 export interface IOrderRepository {
-    createOrder(orderCreate: OrderCreate): Promise<Order>
+  createOrder(orderCreate: OrderCreate): Promise<Order>;
 
-    getOrderByUid(orderUid: string): Promise<Order | null>
+  getOrderByUid(orderUid: string): Promise<Order | null>;
 
-    updateOrder(orderUid: string, updates: OrderUpdate): Promise<Order | null>
+  updateOrder(orderUid: string, updates: OrderUpdate): Promise<Order | null>;
 
-    deleteOrder(orderUid: string): Promise<Order | null>
+  deleteOrder(orderUid: string): Promise<Order | null>;
+
+  getUnclaimedOrders(): Promise<Order[]>;
 }
