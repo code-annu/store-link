@@ -11,10 +11,6 @@ const productController = new ProductController(
   new SellerRepository(),
   new StoreRepository()
 );
-const storeController = new StoreController(
-  new StoreRepository(),
-  new SellerRepository()
-);
 
 productRouter.get(
   "/search",
