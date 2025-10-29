@@ -12,6 +12,8 @@ export class CreateNewOrderUsecase {
     private readonly productRepo: IProductRepository
   ) {}
 
+  private GST = 0.18;
+
   async execute(productUid: string, buyerUid: string): Promise<Order> {
     const buyer = await this.buyerRepo.getBuyer(buyerUid);
     if (!buyer) {
@@ -48,6 +50,7 @@ export class CreateNewOrderUsecase {
       status: OrderStatus.CONFIRMED,
       delivery_address: buyer.address,
       delivery_partner_uid: null,
+      total_amount: product.price + product.price * this.GST,
     };
 
     return await this.orderRepo.createOrder(orderCreate);

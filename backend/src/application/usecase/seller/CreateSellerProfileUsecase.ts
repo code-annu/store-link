@@ -2,8 +2,7 @@ import { ISellerRepository } from "../../../domain/repository/ISellerRepository"
 import { IUserRepository } from "../../../domain/repository/IUserRepository";
 import { NotFoundError } from "../../../domain/error/NotFoundError";
 import { UserRole } from "../../../domain/entity/user";
-import { SellerCreate } from "../../../domain/entity/seller";
-import { SellerProfileOutput } from "../../dto/seller-dto";
+import { Seller, SellerCreate } from "../../../domain/entity/seller";
 import { ForbiddenError } from "../../../domain/error/ForbiddenError";
 import { ConflictError } from "../../../domain/error/ConflictError";
 
@@ -13,7 +12,7 @@ export class CreateSellerProfileUsecase {
     private readonly userRepo: IUserRepository
   ) {}
 
-  async execute(sellerCreate: SellerCreate): Promise<SellerProfileOutput> {
+  async execute(sellerCreate: SellerCreate): Promise<Seller> {
     const user = await this.userRepo.getUserByUid(sellerCreate.uid);
     if (!user) {
       throw new NotFoundError(
@@ -34,11 +33,6 @@ export class CreateSellerProfileUsecase {
       );
     }
 
-    const seller = await this.sellerRepo.createSeller(sellerCreate);
-
-    return {
-      ...seller,
-      role: user.role,
-    } as SellerProfileOutput;
+    return await this.sellerRepo.createSeller(sellerCreate);
   }
 }
