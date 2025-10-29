@@ -8,12 +8,14 @@ import { AuthRequest } from "../middleware/validate-authorization";
 import { ClaimOrderForDeliveryUsecase } from "../../application/usecase/order/ClaimOrderForDeliveryUsecase";
 import { IDeliveryPartnerRepository } from "../../domain/repository/IDeliveryPartnerRepository";
 import { UpdateOrderStatusUsecase } from "../../application/usecase/order/UpdateOrderStatusUsecase";
+import { GetUnclaimedOrdersUsecase } from "../../application/usecase/order/GetUnclaimedOrdersUsecase";
 
 export class OrderController {
   private readonly createNewOrder: CreateNewOrderUsecase;
   private readonly getOrderDetails: GetOrderDetailsUsecase;
   private readonly claimOrderForDelivery: ClaimOrderForDeliveryUsecase;
   private readonly updateOrderStatus: UpdateOrderStatusUsecase;
+  private readonly getUnclaimedOrdersUsecase: GetUnclaimedOrdersUsecase;
 
   constructor(
     orderRepo: IOrderRepository,
@@ -35,6 +37,10 @@ export class OrderController {
     this.updateOrderStatus = new UpdateOrderStatusUsecase(
       orderRepo,
       productRepo
+    );
+    this.getUnclaimedOrdersUsecase = new GetUnclaimedOrdersUsecase(
+      orderRepo,
+      deliveryPartnerRepo
     );
   }
 
@@ -87,6 +93,20 @@ export class OrderController {
         userUid!
       );
 
+      res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getUnclaimedOrders(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const userUid = req.auth?.userId;
+      const response = await this.getUnclaimedOrdersUsecase.execute(userUid!);
       res.status(200).json(response);
     } catch (error) {
       next(error);

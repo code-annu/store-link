@@ -34,4 +34,10 @@ export class OrderRepository
   getUnclaimedOrders(): Promise<Order[]> {
     return super.findManyNullBy("delivery_partner_uid");
   }
+
+  async getOrdersForDeliveryPartner(
+    deliveryPartnerUid: string
+  ): Promise<Order[]> {
+    return super.findManyBy("delivery_partner_uid", deliveryPartnerUid);
+  }
 }

@@ -6,6 +6,7 @@ import { BuyerRepository } from "../../infrastructure/repository/BuyerRepository
 import { validateRequestBody } from "../middleware/validate-request-body";
 import { OrderCreateSchema, OrderUpdateSchema } from "../schema/order-schema";
 import { DeliveryPartnerRepository } from "../../infrastructure/repository/DeliveryPartnerRepository";
+import { validateAuthorization } from "../middleware/validate-authorization";
 
 export const orderRouter = Router();
 
@@ -20,6 +21,12 @@ orderRouter.post(
   "/",
   validateRequestBody(OrderCreateSchema),
   orderController.createOrder.bind(orderController)
+);
+
+orderRouter.get(
+  "/unclaimed",
+  validateAuthorization,
+  orderController.getUnclaimedOrders.bind(orderController)
 );
 
 orderRouter.get("/:orderUid", orderController.getOrder.bind(orderController));

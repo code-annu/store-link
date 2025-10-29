@@ -28,7 +28,6 @@ app.use(
 );
 app.use(`${BASE_API_URL}/stores`, validateAuthorization, storeRouter);
 app.use(`${BASE_API_URL}/orders`, validateAuthorization, orderRouter);
-// app.use(`${BASE_API_URL}/deliveries`, validateAuthorization, orderRouter);
 
 // Public routes
 app.use(`${BASE_API_URL}/products`, productRouter);

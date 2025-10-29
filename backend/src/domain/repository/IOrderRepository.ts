@@ -10,4 +10,6 @@ export interface IOrderRepository {
   deleteOrder(orderUid: string): Promise<Order | null>;
 
   getUnclaimedOrders(): Promise<Order[]>;
+
+  getOrdersForDeliveryPartner(deliveryPartnerUid: string): Promise<Order[]>;
 }

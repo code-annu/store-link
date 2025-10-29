@@ -38,6 +38,6 @@ deliveryPartnerRouter.delete(
 );
 
 deliveryPartnerRouter.get(
-  "/unclaimed-orders",
+  "/deliveries",
   deliveryPartnerController.listUnclaimedOrders.bind(deliveryPartnerController)
 );

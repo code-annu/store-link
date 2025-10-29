@@ -8,6 +8,7 @@ import { IDeliveryPartnerRepository } from "../../domain/repository/IDeliveryPar
 import { IUserRepository } from "../../domain/repository/IUserRepository";
 import { GetUnclaimedOrdersUsecase } from "../../application/usecase/order/GetUnclaimedOrdersUsecase";
 import { IOrderRepository } from "../../domain/repository/IOrderRepository";
+import { ListOrdersForMyDeliveriesUsecase } from "../../application/usecase/order/ListOrdersForMyDeliveryUsecase";
 
 export class DeliveryPartnerController {
   private readonly createDeliveryPartnerProfile: CreateDeliveryPartnerProfileUsecase;
@@ -15,6 +16,7 @@ export class DeliveryPartnerController {
   private readonly getDeliveryPartnerProfile: GetDeliveryPartnerProfileUsecase;
   private readonly deleteDeliveryPartnerProfile: DeleteDeliveryPartnerProfileUsecase;
   private readonly getUnclaimedOrders: GetUnclaimedOrdersUsecase;
+  private readonly listOrdersForMyDelivery: ListOrdersForMyDeliveriesUsecase;
 
   constructor(
     deliveryPartnerRepo: IDeliveryPartnerRepository,
@@ -39,6 +41,10 @@ export class DeliveryPartnerController {
     this.getUnclaimedOrders = new GetUnclaimedOrdersUsecase(
       orderRepo,
       deliveryPartnerRepo
+    );
+    this.listOrdersForMyDelivery = new ListOrdersForMyDeliveriesUsecase(
+      deliveryPartnerRepo,
+      orderRepo
     );
   }
 
@@ -124,6 +130,16 @@ export class DeliveryPartnerController {
     try {
       const userUid = req.auth?.userId;
       const response = await this.getUnclaimedOrders.execute(userUid!);
+      res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async listDeliveries(req: AuthRequest, res: Response, next: NextFunction) {
+    try {
+      const userUid = req.auth?.userId;
+      const response = await this.listOrdersForMyDelivery.execute(userUid!);
       res.status(200).json(response);
     } catch (error) {
       next(error);
